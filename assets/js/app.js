@@ -1481,6 +1481,7 @@ function Ph(_ref) {
     src: url,
     alt: "",
     loading: "lazy",
+    decoding: "async",
     onError: function onError(e) {
       e.currentTarget.style.display = 'none';
     },
