@@ -32,7 +32,15 @@
     opts = opts || {};
     const tier = opts.tier || window.__tier || 'value';
     const w = opts.w || 900;
-    const U = id => (window.__resources && window.__resources['ph_'+id]) || `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+    const U = id => {
+      const resources = window.__resources || {};
+      const primary = resources['ph_'+id];
+      if (primary) return primary;
+      if (window.innerWidth <= 700) {
+        return resources['ag_photo-'+id] || resources['svc_'+id] || `assets/images/mobile-unsplash/${id}.jpg`;
+      }
+      return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+    };
 
     /* —— 已核对内容的高清图集 —— */
     const B = {
@@ -14214,7 +14222,9 @@ function App() {
     _uS12 = _slicedToArray(_uS11, 2),
     aiMsgs = _uS12[0],
     setAiMsgs = _uS12[1];
-  var _uS13 = uS(true),
+  var _uS13 = uS(function () {
+      return window.innerWidth > 700;
+    }),
     _uS14 = _slicedToArray(_uS13, 2),
     consoleOpen = _uS14[0],
     setConsoleOpen = _uS14[1];
@@ -15661,7 +15671,8 @@ function ConsolePanel(_ref) {
       position: 'fixed',
       right: 14,
       bottom: 24,
-      width: 440,
+      width: 'calc(100vw - 28px)',
+      maxWidth: 440,
       maxHeight: 'calc(100vh - 48px)',
       overflowY: 'auto',
       zIndex: 'var(--z-console)',
